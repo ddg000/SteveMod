@@ -1,0 +1,44 @@
+# .github/workflows/build.yml
+name: Build SteveMod 1.12.2
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:   # Можно запустить вручную
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Forge 1.12.2 Build
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 8 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 8
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
+
+      - name: Capture build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: SteveMod-JAR
+          path: build/libs/*.jar
+
+      - name: Create Release (only on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/libs/*.jar
+          generate_release_notes: true
+          fail_on_unmatched_files: true
