@@ -24,7 +24,7 @@ jobs:
           java-version: 8
 
       - name: Make gradlew executable
-        run: chmod +x ./gradlew
+        run: chmod ./gradlew.bat
 
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
