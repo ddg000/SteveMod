@@ -1,0 +1,9 @@
+[{
+  "modid": "stevemod",
+  "name": "Steve Mod",
+  "description": "Steve gives you love",
+  "version": "1.0",
+  "mcversion": "1.12.2",
+  "authorList": ["You"],
+  "credits": "18+"
+}]
