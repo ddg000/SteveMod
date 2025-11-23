@@ -6,33 +6,32 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:   # Можно запустить вручную
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Forge 1.12.2 Build
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Java 8 (Temurin)
+      - name: Setup Java 8
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 8
 
       - name: Make gradlew executable
-        run: chmod ./gradlew.bat
+        run: chmod +x gradlew
 
-      - name: Build with Gradle
+      - name: Build mod
         run: ./gradlew build --no-daemon
 
-      - name: Capture build artifacts
+      - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
-          name: SteveMod-JAR
+          name: SteveMod-1.12.2
           path: build/libs/*.jar
 
       - name: Create Release (only on tag)
@@ -41,4 +40,4 @@ jobs:
         with:
           files: build/libs/*.jar
           generate_release_notes: true
-          fail_on_unmatched_files: true
+          
